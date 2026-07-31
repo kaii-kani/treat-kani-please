@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <title>Treat Kani Please</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 24px;
+
+            font-family: "Mali", sans-serif;
+
+            background: #ffe4ec;
+
+            color: #3a292e;
+        }
+
+        /* กล่องหลัก */
+        .card {
+            width: 100%;
+            max-width: 420px;
+
+            background: #ffffff;
+
+            border: 1px solid #f2cbd7;
+            border-radius: 30px;
+
+            padding: 34px 26px 28px;
+
+            text-align: center;
+
+            box-shadow: 0 15px 45px rgba(190, 90, 125, 0.15);
+        }
+
+        /* รูปตัวเอง */
+        .avatar {
+            width: 140px;
+            height: 140px;
+
+            margin: 0 auto 18px;
+
+            border-radius: 50%;
+            overflow: hidden;
+
+            border: 5px solid #ffe4ec;
+
+            background: #fff0f4;
+
+            box-shadow: 0 7px 20px rgba(190, 90, 125, 0.12);
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+
+            display: block;
+        }
+
+        /* ชื่อ */
+        h1 {
+            margin: 0;
+
+            font-size: 28px;
+            font-weight: 700;
+
+            letter-spacing: -0.5px;
+
+            color: #38282d;
+        }
+
+        /* คำอธิบาย */
+        .sub {
+            margin: 8px 0 24px;
+
+            color: #92717b;
+
+            font-size: 14px;
+
+            line-height: 1.7;
+        }
+
+        /* ปุ่มหลัก */
+        .tip-button {
+            width: 100%;
+
+            border: 0;
+            border-radius: 16px;
+
+            padding: 15px 18px;
+
+            background: #e98da8;
+            color: #ffffff;
+
+            font-family: inherit;
+
+            font-size: 16px;
+            font-weight: 700;
+
+            cursor: pointer;
+
+            box-shadow: 0 7px 18px rgba(233, 141, 168, 0.25);
+
+            transition: 0.2s ease;
+        }
+
+        .tip-button:hover {
+            background: #df7898;
+
+            transform: translateY(-1px);
+        }
+
+        .tip-button:active {
+            transform: translateY(0);
+        }
+
+        /* กล่องรายละเอียดบัญชี */
+        .details {
+            display: none;
+
+            margin-top: 15px;
+
+            padding: 18px;
+
+            border-radius: 18px;
+
+            background: #fff4f7;
+
+            text-align: left;
+        }
+
+        .details.show {
+            display: block;
+        }
+
+        /* ชื่อธนาคาร */
+        .bank {
+            margin-bottom: 12px;
+
+            padding: 10px 12px;
+
+            border-radius: 12px;
+
+            background: #ffffff;
+
+            border: 1px solid #f1d4dd;
+
+            color: #6f4d58;
+
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* Label */
+        .label {
+            margin-bottom: 5px;
+
+            font-size: 13px;
+
+            color: #9b7b85;
+        }
+
+        /* เลขบัญชี */
+        .number {
+            margin-bottom: 12px;
+
+            font-size: 20px;
+            font-weight: 700;
+
+            letter-spacing: 1px;
+
+            color: #3a292e;
+
+            word-break: break-all;
+        }
+
+        /* ปุ่มคัดลอก */
+        .copy-button {
+            width: 100%;
+
+            padding: 13px 16px;
+
+            border-radius: 14px;
+
+            border: 1px solid #eccbd5;
+
+            background: #ffffff;
+
+            color: #62434d;
+
+            font-family: inherit;
+
+            font-size: 15px;
+            font-weight: 600;
+
+            cursor: pointer;
+
+            transition: 0.2s ease;
+        }
+
+        .copy-button:hover {
+            background: #fff8fa;
+
+            border-color: #e6afc0;
+        }
+
+        /* เส้นคั่น */
+        .divider {
+            width: 60px;
+            height: 3px;
+
+            margin: 22px auto 18px;
+
+            border-radius: 999px;
+
+            background: #f3c8d5;
+        }
+
+        /* ข้อความท้าย */
+        .note {
+            margin: 0;
+
+            color: #a48790;
+
+            font-size: 13px;
+
+            line-height: 1.7;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+
+            left: 50%;
+            bottom: 24px;
+
+            transform: translateX(-50%) translateY(20px);
+
+            opacity: 0;
+
+            pointer-events: none;
+
+            background: #38282d;
+            color: #ffffff;
+
+            padding: 11px 17px;
+
+            border-radius: 12px;
+
+            font-size: 14px;
+
+            transition: 0.25s ease;
+        }
+
+        .toast.show {
+            opacity: 1;
+
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* มือถือ */
+        @media (max-width: 480px) {
+
+            body {
+                padding: 16px;
+            }
+
+            .card {
+                padding: 28px 20px 24px;
+                border-radius: 26px;
+            }
+
+            .avatar {
+                width: 125px;
+                height: 125px;
+            }
+
+            h1 {
+                font-size: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="card">
+
+        <!-- รูปตัวเอง -->
+        <!-- เปลี่ยน me.jpg เป็นชื่อไฟล์รูปของคุณ -->
+        <div class="avatar">
+            <img src="me.jpg" alt="kani">
+        </div>
+
+        <!-- ชื่อ -->
+        <h1>🎀 Treat Kani Please 🎀</h1>
+
+        <!-- ข้อความ -->
+        <p class="sub">
+            ขอค่าชานมหน่อยครับบ &gt;&lt;
+        </p>
+
+        <!-- ปุ่มเปิดข้อมูลบัญชี -->
+        <button class="tip-button" onclick="showBankAccount()">
+            💸 ให้ค่าชานม kani
+        </button>
+
+        <!-- รายละเอียดบัญชี -->
+        <section class="details" id="details">
+
+            <!-- เปลี่ยนชื่อธนาคารตรงนี้ -->
+            <div class="bank">
+                🏦 ธนาคารกรุงเทพ
+            </div>
+
+            <div class="label">
+                เลขบัญชี
+            </div>
+
+            <!-- เปลี่ยนเลขบัญชีตรงนี้ -->
+            <div class="number" id="bankAccount">
+                186-4-332679
+            </div>
+
+            <button class="copy-button" onclick="copyBankAccount()">
+                📋 คัดลอกเลขบัญชี
+            </button>
+
+        </section>
+
+        <!-- เส้นคั่น -->
+        <div class="divider"></div>
+
+        <!-- ข้อความขอบคุณ -->
+        <p class="note">
+            ขอบคุณสำหรับค่าชานมนะค้าบบ<br>
+            เลิฟๆเลย 💗💗
+        </p>
+
+    </main>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        คัดลอกแล้ว ✓
+    </div>
+
+
+    <script>
+
+        /* เปิด / ปิดข้อมูลบัญชี */
+        function showBankAccount() {
+
+            document
+                .getElementById("details")
+                .classList
+                .toggle("show");
+
+        }
+
+
+        /* คัดลอกเลขบัญชี */
+        async function copyBankAccount() {
+
+            const number = document
+                .getElementById("bankAccount")
+                .textContent
+                .trim();
+
+            try {
+
+                await navigator.clipboard.writeText(number);
+
+                showToast();
+
+            } catch {
+
+                alert(
+                    "คัดลอกไม่สำเร็จ กรุณาคัดลอกเลขบัญชีด้วยตนเอง"
+                );
+
+            }
+        }
+
+
+        /* แสดงข้อความคัดลอกสำเร็จ */
+        function showToast() {
+
+            const toast =
+                document.getElementById("toast");
+
+            toast.classList.add("show");
+
+            setTimeout(() => {
+
+                toast.classList.remove("show");
+
+            }, 1800);
+
+        }
+
+    </script>
+
+</body>
+</html>
